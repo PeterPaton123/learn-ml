@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://huggingface.co/blog/stable_diffusion -->
+<html class=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta name="description" content="We’re on a journey to advance and democratize artificial intelligence through open source and open science.">
+		<meta property="fb:app_id" content="1321688464574422">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:site" content="@huggingface">
+		<meta property="og:title" content="Stable Diffusion with 🧨 Diffusers">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://huggingface.co/blog/stable_diffusion">
+		<meta property="og:image" content="https://huggingface.co/blog/assets/98_stable_diffusion/thumbnail.png">
+
+		<link rel="stylesheet" href="./Stable Diffusion with 🧨 Diffusers_files/style.css">
+
+		<link rel="preconnect" href="https://fonts.gstatic.com/">
+		<link href="./Stable Diffusion with 🧨 Diffusers_files/css2" rel="stylesheet">
+		<link href="./Stable Diffusion with 🧨 Diffusers_files/css2(1)" rel="stylesheet">
+
+		<link rel="stylesheet" href="./Stable Diffusion with 🧨 Diffusers_files/katex.min.css" as="style" onload="this.onload=null;this.rel=&#39;stylesheet&#39;">
+		<noscript>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" />
+		</noscript>
+
+		<link rel="canonical" href="https://huggingface.co/blog/stable_diffusion">  <!-- HEAD_svelte-vwinwk_START --><link rel="alternate" type="application/rss+xml" href="https://huggingface.co/blog/feed.xml" title="Hugging Face Blog"><!-- HEAD_svelte-vwinwk_END -->
+
+		<title>Stable Diffusion with 🧨 Diffusers</title>
+
+		<script defer="" data-domain="huggingface.co" src="./Stable Diffusion with 🧨 Diffusers_files/script.js"></script>
+		<script type="text/javascript" src="./Stable Diffusion with 🧨 Diffusers_files/challenge.js" defer=""></script>
+	<script src="./Stable Diffusion with 🧨 Diffusers_files/saved_resource" async=""></script><script src="./Stable Diffusion with 🧨 Diffusers_files/js" async=""></script><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/BlogAuthorsByline-69b01afe.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/UserPopover-8b1f7af7.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/FollowButton-e961c7eb.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/index-b22e46f4.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/IconBellWatching-a8f39349.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/IconCheckmarkFilled-bc7ee653.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/IconCommunity-713c46f6.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/IconHeartFilled-4f7093b8.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/IconSpace-1f9b728f.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/IconUpvoteFilled-01c9a666.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/LabelPro-040a416c.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/Popover-3975219c.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/i18n-41f699e6.js"><link rel="modulepreload" as="script" crossorigin="" href="https://huggingface.co/front/build/kube-3dddf71/BlogThumbnail-28500d19.js"></head>
+	<body class="flex flex-col min-h-screen bg-white dark:bg-gray-950 text-black BlogPage">
+		
+
+<div class="flex min-h-screen flex-col">
+	<div class="SVELTE_HYDRATER contents" data-props="{&quot;classNames&quot;:&quot;&quot;,&quot;isWide&quot;:false,&quot;isZh&quot;:false}" data-target="MainHeader"><header class="border-b border-gray-100 "><div class="w-full px-4 container flex h-16 items-center"><div class="flex flex-1 items-center"><a class="mr-5 flex flex-none items-center lg:mr-6" href="https://huggingface.co/"><img alt="Hugging Face&#39;s logo" class="w-7 md:mr-2" src="./Stable Diffusion with 🧨 Diffusers_files/huggingface_logo-noborder.svg"> <span class="hidden whitespace-nowrap text-lg font-bold md:block">Hugging Face</span></a> <div class="relative flex-1 lg:max-w-sm mr-2 sm:mr-4 md:mr-3 xl:mr-6"><input autocomplete="off" class="w-full dark:bg-gray-950 pl-8 form-input-alt h-9 pr-3 focus:shadow-xl " name="" placeholder="Search models, datasets, users..." spellcheck="false" type="text"> <svg class="absolute left-2.5 text-gray-400 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M30 28.59L22.45 21A11 11 0 1 0 21 22.45L28.59 30zM5 14a9 9 0 1 1 9 9a9 9 0 0 1-9-9z" fill="currentColor"></path></svg> </div> <div class="flex flex-none items-center justify-center p-0.5 place-self-stretch lg:hidden"><button class="relative z-40 flex h-6 w-8 items-center justify-center" type="button"><svg width="1em" height="1em" viewBox="0 0 10 10" class="text-xl" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" preserveAspectRatio="xMidYMid meet" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.65039 2.9999C1.65039 2.8066 1.80709 2.6499 2.00039 2.6499H8.00039C8.19369 2.6499 8.35039 2.8066 8.35039 2.9999C8.35039 3.1932 8.19369 3.3499 8.00039 3.3499H2.00039C1.80709 3.3499 1.65039 3.1932 1.65039 2.9999ZM1.65039 4.9999C1.65039 4.8066 1.80709 4.6499 2.00039 4.6499H8.00039C8.19369 4.6499 8.35039 4.8066 8.35039 4.9999C8.35039 5.1932 8.19369 5.3499 8.00039 5.3499H2.00039C1.80709 5.3499 1.65039 5.1932 1.65039 4.9999ZM2.00039 6.6499C1.80709 6.6499 1.65039 6.8066 1.65039 6.9999C1.65039 7.1932 1.80709 7.3499 2.00039 7.3499H8.00039C8.19369 7.3499 8.35039 7.1932 8.35039 6.9999C8.35039 6.8066 8.19369 6.6499 8.00039 6.6499H2.00039Z"></path></svg> </button> </div></div> <nav aria-label="Main" class="ml-auto hidden lg:block"><ul class="flex items-center space-x-1.5 xl:space-x-2"><li><a class="group flex items-center px-2 py-0.5 dark:hover:text-gray-400 hover:text-indigo-700" href="https://huggingface.co/models"><svg class="mr-1.5 text-gray-400 group-hover:text-indigo-500" style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path class="uim-quaternary" d="M20.23 7.24L12 12L3.77 7.24a1.98 1.98 0 0 1 .7-.71L11 2.76c.62-.35 1.38-.35 2 0l6.53 3.77c.29.173.531.418.7.71z" opacity=".25" fill="currentColor"></path><path class="uim-tertiary" d="M12 12v9.5a2.09 2.09 0 0 1-.91-.21L4.5 17.48a2.003 2.003 0 0 1-1-1.73v-7.5a2.06 2.06 0 0 1 .27-1.01L12 12z" opacity=".5" fill="currentColor"></path><path class="uim-primary" d="M20.5 8.25v7.5a2.003 2.003 0 0 1-1 1.73l-6.62 3.82c-.275.13-.576.198-.88.2V12l8.23-4.76c.175.308.268.656.27 1.01z" fill="currentColor"></path></svg> Models</a></li><li><a class="group flex items-center px-2 py-0.5 dark:hover:text-gray-400 hover:text-red-700" href="https://huggingface.co/datasets"><svg class="mr-1.5 text-gray-400 group-hover:text-red-500" style="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 25 25"><ellipse cx="12.5" cy="5" fill="currentColor" fill-opacity="0.25" rx="7.5" ry="2"></ellipse><path d="M12.5 15C16.6421 15 20 14.1046 20 13V20C20 21.1046 16.6421 22 12.5 22C8.35786 22 5 21.1046 5 20V13C5 14.1046 8.35786 15 12.5 15Z" fill="currentColor" opacity="0.5"></path><path d="M12.5 7C16.6421 7 20 6.10457 20 5V11.5C20 12.6046 16.6421 13.5 12.5 13.5C8.35786 13.5 5 12.6046 5 11.5V5C5 6.10457 8.35786 7 12.5 7Z" fill="currentColor" opacity="0.5"></path><path d="M5.23628 12C5.08204 12.1598 5 12.8273 5 13C5 14.1046 8.35786 15 12.5 15C16.6421 15 20 14.1046 20 13C20 12.8273 19.918 12.1598 19.7637 12C18.9311 12.8626 15.9947 13.5 12.5 13.5C9.0053 13.5 6.06886 12.8626 5.23628 12Z" fill="currentColor"></path></svg> Datasets</a></li><li><a class="group flex items-center px-2 py-0.5 dark:hover:text-gray-400 hover:text-blue-700" href="https://huggingface.co/spaces"><svg class="mr-1.5 text-gray-400 group-hover:text-blue-500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" viewBox="0 0 25 25"><path opacity=".5" d="M6.016 14.674v4.31h4.31v-4.31h-4.31ZM14.674 14.674v4.31h4.31v-4.31h-4.31ZM6.016 6.016v4.31h4.31v-4.31h-4.31Z" fill="currentColor"></path><path opacity=".75" fill-rule="evenodd" clip-rule="evenodd" d="M3 4.914C3 3.857 3.857 3 4.914 3h6.514c.884 0 1.628.6 1.848 1.414a5.171 5.171 0 0 1 7.31 7.31c.815.22 1.414.964 1.414 1.848v6.514A1.914 1.914 0 0 1 20.086 22H4.914A1.914 1.914 0 0 1 3 20.086V4.914Zm3.016 1.102v4.31h4.31v-4.31h-4.31Zm0 12.968v-4.31h4.31v4.31h-4.31Zm8.658 0v-4.31h4.31v4.31h-4.31Zm0-10.813a2.155 2.155 0 1 1 4.31 0 2.155 2.155 0 0 1-4.31 0Z" fill="currentColor"></path><path opacity=".25" d="M16.829 6.016a2.155 2.155 0 1 0 0 4.31 2.155 2.155 0 0 0 0-4.31Z" fill="currentColor"></path></svg> Spaces</a></li><li><a class="group flex items-center px-2 py-0.5 dark:hover:text-gray-400 hover:text-yellow-700" href="https://huggingface.co/posts"><svg class="mr-1.5 text-gray-400 group-hover:text-yellow-500 !text-yellow-500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" viewBox="0 0 12 12" preserveAspectRatio="xMidYMid meet"><path fill="currentColor" fill-rule="evenodd" d="M3.73 2.4A4.25 4.25 0 1 1 6 10.26H2.17l-.13-.02a.43.43 0 0 1-.3-.43l.01-.06a.43.43 0 0 1 .12-.22l.84-.84A4.26 4.26 0 0 1 3.73 2.4Z" clip-rule="evenodd"></path></svg> Posts</a></li><li><a class="group flex items-center px-2 py-0.5 dark:hover:text-gray-400 hover:text-yellow-700" href="https://huggingface.co/docs"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="mr-1.5 text-gray-400 group-hover:text-yellow-500" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path opacity="0.5" d="M20.9022 5.10334L10.8012 10.8791L7.76318 9.11193C8.07741 8.56791 8.5256 8.11332 9.06512 7.7914L15.9336 3.73907C17.0868 3.08811 18.5002 3.26422 19.6534 3.91519L19.3859 3.73911C19.9253 4.06087 20.5879 4.56025 20.9022 5.10334Z" fill="currentColor"></path><path d="M10.7999 10.8792V28.5483C10.2136 28.5475 9.63494 28.4139 9.10745 28.1578C8.5429 27.8312 8.074 27.3621 7.74761 26.7975C7.42122 26.2327 7.24878 25.5923 7.24756 24.9402V10.9908C7.25062 10.3319 7.42358 9.68487 7.74973 9.1123L10.7999 10.8792Z" fill="currentColor" fill-opacity="0.75"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M21.3368 10.8499V6.918C21.3331 6.25959 21.16 5.61234 20.8346 5.03949L10.7971 10.8727L10.8046 10.874L21.3368 10.8499Z" fill="currentColor"></path><path opacity="0.5" d="M21.7937 10.8488L10.7825 10.8741V28.5486L21.7937 28.5234C23.3344 28.5234 24.5835 27.2743 24.5835 25.7335V13.6387C24.5835 12.0979 23.4365 11.1233 21.7937 10.8488Z" fill="currentColor"></path></svg> Docs</a></li> <li class="max-2xl:hidden"><div class="relative "><button class="px-2 py-0.5 group hover:text-green-700 dark:hover:text-gray-400 flex items-center " type="button"><svg class="mr-1.5 text-gray-400 group-hover:text-green-500" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path class="uim-tertiary" d="M19 6H5a3 3 0 0 0-3 3v2.72L8.837 14h6.326L22 11.72V9a3 3 0 0 0-3-3z" opacity=".5" fill="currentColor"></path><path class="uim-primary" d="M10 6V5h4v1h2V5a2.002 2.002 0 0 0-2-2h-4a2.002 2.002 0 0 0-2 2v1h2zm-1.163 8L2 11.72V18a3.003 3.003 0 0 0 3 3h14a3.003 3.003 0 0 0 3-3v-6.28L15.163 14H8.837z" fill="currentColor"></path></svg> Solutions </button> </div></li> <li><a class="group flex items-center px-2 py-0.5 hover:text-gray-500 dark:hover:text-gray-400" href="https://huggingface.co/pricing">Pricing</a></li> <li><div class="relative group"><button class="px-2 py-0.5 hover:text-gray-500 dark:hover:text-gray-600 flex items-center " type="button"><svg class="mr-1.5 text-gray-500 w-5 group-hover:text-gray-400 dark:text-gray-300 dark:group-hover:text-gray-400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" viewBox="0 0 32 18" preserveAspectRatio="xMidYMid meet"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.4504 3.30221C14.4504 2.836 14.8284 2.45807 15.2946 2.45807H28.4933C28.9595 2.45807 29.3374 2.836 29.3374 3.30221C29.3374 3.76842 28.9595 4.14635 28.4933 4.14635H15.2946C14.8284 4.14635 14.4504 3.76842 14.4504 3.30221Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M14.4504 9.00002C14.4504 8.53382 14.8284 8.15588 15.2946 8.15588H28.4933C28.9595 8.15588 29.3374 8.53382 29.3374 9.00002C29.3374 9.46623 28.9595 9.84417 28.4933 9.84417H15.2946C14.8284 9.84417 14.4504 9.46623 14.4504 9.00002Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M14.4504 14.6978C14.4504 14.2316 14.8284 13.8537 15.2946 13.8537H28.4933C28.9595 13.8537 29.3374 14.2316 29.3374 14.6978C29.3374 15.164 28.9595 15.542 28.4933 15.542H15.2946C14.8284 15.542 14.4504 15.164 14.4504 14.6978Z" fill="currentColor"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M1.94549 6.87377C2.27514 6.54411 2.80962 6.54411 3.13928 6.87377L6.23458 9.96907L9.32988 6.87377C9.65954 6.54411 10.194 6.54411 10.5237 6.87377C10.8533 7.20343 10.8533 7.73791 10.5237 8.06756L6.23458 12.3567L1.94549 8.06756C1.61583 7.73791 1.61583 7.20343 1.94549 6.87377Z" fill="currentColor"></path></svg>  </button> </div></li> <li><hr class="h-5 w-0.5 border-none bg-gray-100 dark:bg-gray-800"></li> <li><a class="block cursor-pointer px-2 py-0.5 hover:text-gray-500 dark:hover:text-gray-400" href="https://huggingface.co/login">Log In</a></li> <li><a class="rounded-full border border-transparent bg-gray-900 px-3 py-1 leading-none text-white hover:border-black hover:bg-white hover:text-black" href="https://huggingface.co/join">Sign Up</a></li></ul></nav></div></header></div>
+	
+	<div class="SVELTE_HYDRATER contents" data-props="{}" data-target="GoogleAnalyticsTracker"></div>
+	
+	
+	<div class="SVELTE_HYDRATER contents" data-props="{}" data-target="SSOBanner"></div>
+	
+
+	<main class="flex flex-1 flex-col"><div class="blog-content copiable-code-container container prose mx-auto max-w-3xl pb-16 pt-6 lg:prose-lg 2xl:prose-lg lg:pt-16 2xl:max-w-4xl"><div class="SVELTE_HYDRATER contents" data-props="{}" data-target="RepoCodeCopy"><div></div></div>
+		<div class="mb-4"><a href="https://huggingface.co/blog" class="flex items-center font-sans !text-gray-500 !no-underline hover:!underline"><svg class="mr-2 h-3 w-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" fill="currentColor"></path></svg>
+				Back to blog</a></div>
+		<!-- HTML_TAG_START --><h1 class="relative group flex items-center">
+	<a id="stable-diffusion-with-🧨-diffusers" class="block pr-1.5 text-lg md:absolute md:p-1.5 md:opacity-0 md:group-hover:opacity-100 md:right-full" href="https://huggingface.co/blog/stable_diffusion#stable-diffusion-with-%F0%9F%A7%A8-diffusers">
+		<span class="header-link"><svg class="text-gray-500 hover:text-black dark:hover:text-gray-200 w-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path d="M167.594 88.393a8.001 8.001 0 0 1 0 11.314l-67.882 67.882a8 8 0 1 1-11.314-11.315l67.882-67.881a8.003 8.003 0 0 1 11.314 0zm-28.287 84.86l-28.284 28.284a40 40 0 0 1-56.567-56.567l28.284-28.284a8 8 0 0 0-11.315-11.315l-28.284 28.284a56 56 0 0 0 79.196 79.197l28.285-28.285a8 8 0 1 0-11.315-11.314zM212.852 43.14a56.002 56.002 0 0 0-79.196 0l-28.284 28.284a8 8 0 1 0 11.314 11.314l28.284-28.284a40 40 0 0 1 56.568 56.567l-28.285 28.285a8 8 0 0 0 11.315 11.314l28.284-28.284a56.065 56.065 0 0 0 0-79.196z" fill="currentColor"></path></svg></span>
+	</a>
+	<span>
+		Stable Diffusion with 🧨 Diffusers
+	</span>
+</h1><div><div class="mb-4 flex items-center gap-x-4 text-base">
+		<span>Published
+				August 22, 2022</span></div>
+	<a target="_blank" class="btn mb-5 font-sans text-sm no-underline" href="https://github.com/huggingface/blog/blob/main/stable_diffusion.md">Update on GitHub</a></div><div class="not-prose"><div class="SVELTE_HYDRATER contents" data-props="{&quot;authors&quot;:[{&quot;author&quot;:{&quot;avatarUrl&quot;:&quot;https://aeiljuispo.cloudimg.io/v7/https://cdn-uploads.huggingface.co/production/uploads/1600014820272-5ec0135ded25d76864d553f1.jpeg?w=200&amp;h=200&amp;f=face&quot;,&quot;fullname&quot;:&quot;Suraj Patil&quot;,&quot;name&quot;:&quot;valhalla&quot;,&quot;type&quot;:&quot;user&quot;,&quot;isPro&quot;:false,&quot;isHf&quot;:true}},{&quot;author&quot;:{&quot;avatarUrl&quot;:&quot;https://aeiljuispo.cloudimg.io/v7/https://cdn-uploads.huggingface.co/production/uploads/1617264212503-603d25b75f9d390ab190b777.jpeg?w=200&amp;h=200&amp;f=face&quot;,&quot;fullname&quot;:&quot;Pedro Cuenca&quot;,&quot;name&quot;:&quot;pcuenq&quot;,&quot;type&quot;:&quot;user&quot;,&quot;isPro&quot;:false,&quot;isHf&quot;:true}},{&quot;author&quot;:{&quot;avatarUrl&quot;:&quot;https://aeiljuispo.cloudimg.io/v7/https://cdn-uploads.huggingface.co/production/uploads/1653497705818-noauth.png?w=200&amp;h=200&amp;f=face&quot;,&quot;fullname&quot;:&quot;Nathan Lambert&quot;,&quot;name&quot;:&quot;natolambert&quot;,&quot;type&quot;:&quot;user&quot;,&quot;isPro&quot;:false,&quot;isHf&quot;:false}},{&quot;author&quot;:{&quot;avatarUrl&quot;:&quot;https://aeiljuispo.cloudimg.io/v7/https://cdn-uploads.huggingface.co/production/uploads/1584435275418-5dfcb1aada6d0311fd3d5448.jpeg?w=200&amp;h=200&amp;f=face&quot;,&quot;fullname&quot;:&quot;Patrick von Platen&quot;,&quot;name&quot;:&quot;patrickvonplaten&quot;,&quot;type&quot;:&quot;user&quot;,&quot;isPro&quot;:false,&quot;isHf&quot;:false}}],&quot;translators&quot;:[],&quot;proofreaders&quot;:[],&quot;lang&quot;:&quot;en&quot;}" data-target="BlogAuthorsByline"><div class="not-prose"><div class="flex flex-wrap items-center gap-3.5"><span class="inline-block"><span class="contents"><a href="https://huggingface.co/valhalla" class="flex items-center leading-tight"><img class="m-0 mr-3 h-12 w-12 !rounded-full" alt="Suraj Patil&#39;s avatar" src="./Stable Diffusion with 🧨 Diffusers_files/1600014820272-5ec0135ded25d76864d553f1.jpeg"> <div class="font-thin text-gray-900 dark:text-gray-300"><span class="block font-mono text-[0.92rem] !leading-tight underline lg:text-base">valhalla</span> <span class="fullname underline">Suraj Patil</span> </div></a> </span> </span><span class="inline-block"><span class="contents"><a href="https://huggingface.co/pcuenq" class="flex items-center leading-tight"><img class="m-0 mr-3 h-12 w-12 !rounded-full" alt="Pedro Cuenca&#39;s avatar" src="./Stable Diffusion with 🧨 Diffusers_files/1617264212503-603d25b75f9d390ab190b777.jpeg"> <div class="font-thin text-gray-900 dark:text-gray-300"><span class="block font-mono text-[0.92rem] !leading-tight underline lg:text-base">pcuenq</span> <span class="fullname underline">Pedro Cuenca</span> </div></a> </span> </span><span class="inline-block"><span class="contents"><a href="https://huggingface.co/natolambert" class="flex items-center leading-tight"><img class="m-0 mr-3 h-12 w-12 !rounded-full" alt="Nathan Lambert&#39;s avatar" src="./Stable Diffusion with 🧨 Diffusers_files/1653497705818-noauth.png"> <div class="font-thin text-gray-900 dark:text-gray-300"><span class="block font-mono text-[0.92rem] !leading-tight underline lg:text-base">natolambert</span> <span class="fullname underline">Nathan Lambert</span> </div></a> </span> </span><span class="inline-block"><span class="contents"><a href="https://huggingface.co/patrickvonplaten" class="flex items-center leading-tight"><img class="m-0 mr-3 h-12 w-12 !rounded-full" alt="Patrick von Platen&#39;s avatar" src="./Stable Diffusion with 🧨 Diffusers_files/1584435275418-5dfcb1aada6d0311fd3d5448.jpeg"> <div class="font-thin text-gray-900 dark:text-gray-300"><span class="block font-mono text-[0.92rem] !leading-tight underline lg:text-base">patrickvonplaten</span> <span class="fullname underline">Patrick von Platen</span> </div></a> </span> </span></div> </div></div></div>
+<a target="_blank" href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/stable_diffusion.ipynb">
+    <img src="./Stable Diffusion with 🧨 Diffusers_files/colab-badge.svg" alt="Open In Colab">
+</a>
+
+<p><strong>Stable Diffusion</strong> 🎨 
+<em>...using 🧨 Diffusers</em></p>
+<p>Stable Diffusion is a text-to-image latent diffusion model created by the researchers and engineers from <a href="https://github.com/CompVis">CompVis</a>, <a href="https://stability.ai/">Stability AI</a> and <a href="https://laion.ai/">LAION</a>. 
+It is trained on 512x512 images from a subset of the <a href="https://laion.ai/blog/laion-5b/">LAION-5B</a> database.
+<em>LAION-5B</em> is the largest, freely accessible multi-modal dataset that currently exists.</p>
+<p>In this post, we want to show how to use Stable Diffusion with the <a href="https://github.com/huggingface/diffusers">🧨 Diffusers library</a>, explain how the model works and finally dive a bit deeper into how <code>diffusers</code> allows
+one to customize the image generation pipeline.</p>
+<p><strong>Note</strong>: It is highly recommended to have a basic understanding of how diffusion models work. If diffusion 
+models are completely new to you, we recommend reading one of the following blog posts:</p>
+<ul>
+<li><a href="https://huggingface.co/blog/annotated-diffusion">The Annotated Diffusion Model</a></li>
+<li><a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/diffusers_intro.ipynb">Getting started with 🧨 Diffusers</a></li>
+</ul>
+<p>Now, let's get started by generating some images 🎨.</p>
+<h2 class="relative group flex items-center">
+	<a id="running-stable-diffusion" class="block pr-1.5 text-lg md:absolute md:p-1.5 md:opacity-0 md:group-hover:opacity-100 md:right-full" href="https://huggingface.co/blog/stable_diffusion#running-stable-diffusion">
+		<span class="header-link"><svg class="text-gray-500 hover:text-black dark:hover:text-gray-200 w-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path d="M167.594 88.393a8.001 8.001 0 0 1 0 11.314l-67.882 67.882a8 8 0 1 1-11.314-11.315l67.882-67.881a8.003 8.003 0 0 1 11.314 0zm-28.287 84.86l-28.284 28.284a40 40 0 0 1-56.567-56.567l28.284-28.284a8 8 0 0 0-11.315-11.315l-28.284 28.284a56 56 0 0 0 79.196 79.197l28.285-28.285a8 8 0 1 0-11.315-11.314zM212.852 43.14a56.002 56.002 0 0 0-79.196 0l-28.284 28.284a8 8 0 1 0 11.314 11.314l28.284-28.284a40 40 0 0 1 56.568 56.567l-28.285 28.285a8 8 0 0 0 11.315 11.314l28.284-28.284a56.065 56.065 0 0 0 0-79.196z" fill="currentColor"></path></svg></span>
+	</a>
+	<span>
+		Running Stable Diffusion
+	</span>
+</h2>
+<h3 class="relative group flex items-center">
+	<a id="license" class="block pr-1.5 text-lg md:absolute md:p-1.5 md:opacity-0 md:group-hover:opacity-100 md:right-full" href="https://huggingface.co/blog/stable_diffusion#license">
+		<span class="header-link"><svg class="text-gray-500 hover:text-black dark:hover:text-gray-200 w-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path d="M167.594 88.393a8.001 8.001 0 0 1 0 11.314l-67.882 67.882a8 8 0 1 1-11.314-11.315l67.882-67.881a8.003 8.003 0 0 1 11.314 0zm-28.287 84.86l-28.284 28.284a40 40 0 0 1-56.567-56.567l28.284-28.284a8 8 0 0 0-11.315-11.315l-28.284 28.284a56 56 0 0 0 79.196 79.197l28.285-28.285a8 8 0 1 0-11.315-11.314zM212.852 43.14a56.002 56.002 0 0 0-79.196 0l-28.284 28.284a8 8 0 1 0 11.314 11.314l28.284-28.284a40 40 0 0 1 56.568 56.567l-28.285 28.285a8 8 0 0 0 11.315 11.314l28.284-28.284a56.065 56.065 0 0 0 0-79.196z" fill="currentColor"></path></svg></span>
+	</a>
+	<span>
+		License
+	</span>
+</h3>
+<p>Before using the model, you need to accept the model <a href="https://huggingface.co/spaces/CompVis/stable-diffusion-license">license</a> in order to download and use the weights. <strong>Note: the license does not need to be explicitly accepted through the UI anymore</strong>.</p>
+<p>The license is designed to mitigate the potential harmful effects of such a powerful machine learning system. 
+We request users to <strong>read the license entirely and carefully</strong>. Here we offer a summary:</p>
+<ol>
+<li>You can't use the model to deliberately produce nor share illegal or harmful outputs or content,</li>
+<li>We claim no rights on the outputs you generate, you are free to use them and are accountable for their use which should not go against the provisions set in the license, and</li>
+<li>You may re-distribute the weights and use the model commercially and/or as a service. If you do, please be aware you have to include the same use restrictions as the ones in the license and share a copy of the CreativeML OpenRAIL-M to all your users.</li>
+</ol>
+<h3 class="relative group flex items-center">
+	<a id="usage" class="block pr-1.5 text-lg md:absolute md:p-1.5 md:opacity-0 md:group-hover:opacity-100 md:right-full" href="https://huggingface.co/blog/stable_diffusion#usage">
+		<span class="header-link"><svg class="text-gray-500 hover:text-black dark:hover:text-gray-200 w-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path d="M167.594 88.393a8.001 8.001 0 0 1 0 11.314l-67.882 67.882a8 8 0 1 1-11.314-11.315l67.882-67.881a8.003 8.003 0 0 1 11.314 0zm-28.287 84.86l-28.284 28.284a40 40 0 0 1-56.567-56.567l28.284-28.284a8 8 0 0 0-11.315-11.315l-28.284 28.284a56 56 0 0 0 79.196 79.197l28.285-28.285a8 8 0 1 0-11.315-11.314zM212.852 43.14a56.002 56.002 0 0 0-79.196 0l-28.284 28.284a8 8 0 1 0 11.314 11.314l28.284-28.284a40 40 0 0 1 56.568 56.567l-28.285 28.285a8 8 0 0 0 11.315 11.314l28.284-28.284a56.065 56.065 0 0 0 0-79.196z" fill="currentColor"></path></svg></span>
+	</a>
+	<span>
+		Usage
+	</span>
+</h3>
+<p>First, you should install <code>diffusers==0.10.2</code> to run the following code snippets:</p>
+<div class="relative group repo-copy-code"><pre><code class="language-bash">pip install diffusers==0.10.2 transformers scipy ftfy accelerate
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>In this post we'll use model version <a href="https://huggingface.co/CompVis/stable-diffusion-v1-4"><code>v1-4</code></a>, but you can also use other versions of the model such as 1.5, 2, and 2.1 with minimal code changes.</p>
+<p>The Stable Diffusion model can be run in inference with just a couple of lines using the <a href="https://github.com/huggingface/diffusers/blob/main/src/diffusers/pipelines/stable_diffusion/pipeline_stable_diffusion.py"><code>StableDiffusionPipeline</code></a> pipeline. The pipeline sets up everything you need to generate images from text with 
+a simple <code>from_pretrained</code> function call.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">from</span> diffusers <span class="hljs-keyword">import</span> StableDiffusionPipeline
+
+pipe = StableDiffusionPipeline.from_pretrained(<span class="hljs-string">"CompVis/stable-diffusion-v1-4"</span>)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>If a GPU is available, let's move it to one!</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">pipe.to(<span class="hljs-string">"cuda"</span>)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p><strong>Note</strong>: If you are limited by GPU memory and have less than 10GB of GPU RAM available, please
+make sure to load the <code>StableDiffusionPipeline</code> in float16 precision instead of the default
+float32 precision as done above.</p>
+<p>You can do so by loading the weights from the <code>fp16</code> branch and by telling <code>diffusers</code> to expect the 
+weights to be in float16 precision:</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">import</span> torch
+<span class="hljs-keyword">from</span> diffusers <span class="hljs-keyword">import</span> StableDiffusionPipeline
+
+pipe = StableDiffusionPipeline.from_pretrained(<span class="hljs-string">"CompVis/stable-diffusion-v1-4"</span>, revision=<span class="hljs-string">"fp16"</span>, torch_dtype=torch.float16)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>To run the pipeline, simply define the prompt and call <code>pipe</code>.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">prompt = <span class="hljs-string">"a photograph of an astronaut riding a horse"</span>
+
+image = pipe(prompt).images[<span class="hljs-number">0</span>]
+
+<span class="hljs-comment"># you can save the image with</span>
+<span class="hljs-comment"># image.save(f"astronaut_rides_horse.png")</span>
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>The result would look as follows</p>
+<p><a href="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_12_1.png" rel="nofollow"><img src="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_12_1.png" alt="png"></a></p>
+<p>The previous code will give you a different image every time you run it.</p>
+<p>If at some point you get a black image, it may be because the content filter built inside the model might have detected an NSFW result. 
+If you believe this shouldn't be the case, try tweaking your prompt or using a different seed. In fact, the model predictions include information about whether NSFW was detected for a particular result. Let's see what they look like:</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">result = pipe(prompt)
+<span class="hljs-built_in">print</span>(result)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<div class="relative group repo-copy-code"><pre><code class="language-json"><span class="hljs-punctuation">{</span>
+    'images'<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>&lt;PIL.Image.Image image mode=RGB size=<span class="hljs-number">512</span>x512&gt;<span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+    'nsfw_content_detected'<span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>False<span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>If you want deterministic output you can seed a random seed and pass a generator to the pipeline. 
+Every time you use a generator with the same seed you'll get the same image output.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">import</span> torch
+
+generator = torch.Generator(<span class="hljs-string">"cuda"</span>).manual_seed(<span class="hljs-number">1024</span>)
+image = pipe(prompt, guidance_scale=<span class="hljs-number">7.5</span>, generator=generator).images[<span class="hljs-number">0</span>]
+
+<span class="hljs-comment"># you can save the image with</span>
+<span class="hljs-comment"># image.save(f"astronaut_rides_horse.png")</span>
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>The result would look as follows</p>
+<p><a href="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_14_1.png" rel="nofollow"><img src="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_14_1.png" alt="png"></a></p>
+<p>You can change the number of inference steps using the <code>num_inference_steps</code> argument. </p>
+<p>In general, results are better the more steps you use, however the more steps, the longer the generation takes.
+Stable Diffusion works quite well with a relatively small number of steps, so we recommend to use the default number of inference steps of <code>50</code>. 
+If you want faster results you can use a smaller number. If you want potentially higher quality results, 
+you can use larger numbers.</p>
+<p>Let's try out running the pipeline with less denoising steps.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">import</span> torch
+
+generator = torch.Generator(<span class="hljs-string">"cuda"</span>).manual_seed(<span class="hljs-number">1024</span>)
+image = pipe(prompt, guidance_scale=<span class="hljs-number">7.5</span>, num_inference_steps=<span class="hljs-number">15</span>, generator=generator).images[<span class="hljs-number">0</span>]
+
+<span class="hljs-comment"># you can save the image with</span>
+<span class="hljs-comment"># image.save(f"astronaut_rides_horse.png")</span>
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p><a href="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_16_1.png" rel="nofollow"><img src="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_16_1.png" alt="png"></a></p>
+<p>Note how the structure is the same, but there are problems in the astronauts suit and the general form of the horse.
+This shows that using only 15 denoising steps has significantly degraded the quality of the generation result. As stated earlier <code>50</code> denoising steps is usually sufficient to generate high-quality images.</p>
+<p>Besides <code>num_inference_steps</code>, we've been using another function argument, called <code>guidance_scale</code> in all 
+previous examples. <code>guidance_scale</code> is a way to increase the adherence to the conditional signal that guides the generation (text, in this case) as well as overall sample quality. 
+It is also known as <a href="https://arxiv.org/abs/2207.12598">classifier-free guidance</a>, which in simple terms forces the generation to better match the prompt potentially at the cost of image quality or diversity. 
+Values between <code>7</code> and <code>8.5</code> are usually good choices for Stable Diffusion.  By default the pipeline
+uses a <code>guidance_scale</code> of 7.5.</p>
+<p>If you use a very large value the images might look good, but will be less diverse. 
+You can learn about the technical details of this parameter in <a href="https://huggingface.co/blog/stable_diffusion#writing-your-own-inference-pipeline">this section</a> of the post.</p>
+<p>Next, let's see how you can generate several images of the same prompt at once. 
+First, we'll create an <code>image_grid</code> function to help us visualize them nicely in a grid.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">from</span> PIL <span class="hljs-keyword">import</span> Image
+
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">image_grid</span>(<span class="hljs-params">imgs, rows, cols</span>):
+    <span class="hljs-keyword">assert</span> <span class="hljs-built_in">len</span>(imgs) == rows*cols
+
+    w, h = imgs[<span class="hljs-number">0</span>].size
+    grid = Image.new(<span class="hljs-string">'RGB'</span>, size=(cols*w, rows*h))
+    grid_w, grid_h = grid.size
+    
+    <span class="hljs-keyword">for</span> i, img <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(imgs):
+        grid.paste(img, box=(i%cols*w, i//cols*h))
+    <span class="hljs-keyword">return</span> grid
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>We can generate multiple images for the same prompt by simply using a list with the same prompt repeated several times. We'll send the list to the pipeline instead of the string we used before.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">num_images = <span class="hljs-number">3</span>
+prompt = [<span class="hljs-string">"a photograph of an astronaut riding a horse"</span>] * num_images
+
+images = pipe(prompt).images
+
+grid = image_grid(images, rows=<span class="hljs-number">1</span>, cols=<span class="hljs-number">3</span>)
+
+<span class="hljs-comment"># you can save the grid with</span>
+<span class="hljs-comment"># grid.save(f"astronaut_rides_horse.png")</span>
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p><a href="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_22_1.png" rel="nofollow"><img src="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_22_1.png" alt="png"></a></p>
+<p>By default, stable diffusion produces images of <code>512 × 512</code> pixels. It's very easy to override the default using the <code>height</code> and <code>width</code> arguments to create rectangular images in portrait or landscape ratios.</p>
+<p>When choosing image sizes, we advise the following:</p>
+<ul>
+<li>Make sure <code>height</code> and <code>width</code> are both multiples of <code>8</code>.</li>
+<li>Going below 512 might result in lower quality images.</li>
+<li>Going over 512 in both directions will repeat image areas (global coherence is lost).</li>
+<li>The best way to create non-square images is to use <code>512</code> in one dimension, and a value larger than that in the other one.</li>
+</ul>
+<p>Let's run an example:</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">prompt = <span class="hljs-string">"a photograph of an astronaut riding a horse"</span>
+image = pipe(prompt, height=<span class="hljs-number">512</span>, width=<span class="hljs-number">768</span>).images[<span class="hljs-number">0</span>]
+
+<span class="hljs-comment"># you can save the image with</span>
+<span class="hljs-comment"># image.save(f"astronaut_rides_horse.png")</span>
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p><a href="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_26_1.png" rel="nofollow"><img src="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_26_1.png" alt="png"></a></p>
+<h2 class="relative group flex items-center">
+	<a id="how-does-stable-diffusion-work" class="block pr-1.5 text-lg md:absolute md:p-1.5 md:opacity-0 md:group-hover:opacity-100 md:right-full" href="https://huggingface.co/blog/stable_diffusion#how-does-stable-diffusion-work">
+		<span class="header-link"><svg class="text-gray-500 hover:text-black dark:hover:text-gray-200 w-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path d="M167.594 88.393a8.001 8.001 0 0 1 0 11.314l-67.882 67.882a8 8 0 1 1-11.314-11.315l67.882-67.881a8.003 8.003 0 0 1 11.314 0zm-28.287 84.86l-28.284 28.284a40 40 0 0 1-56.567-56.567l28.284-28.284a8 8 0 0 0-11.315-11.315l-28.284 28.284a56 56 0 0 0 79.196 79.197l28.285-28.285a8 8 0 1 0-11.315-11.314zM212.852 43.14a56.002 56.002 0 0 0-79.196 0l-28.284 28.284a8 8 0 1 0 11.314 11.314l28.284-28.284a40 40 0 0 1 56.568 56.567l-28.285 28.285a8 8 0 0 0 11.315 11.314l28.284-28.284a56.065 56.065 0 0 0 0-79.196z" fill="currentColor"></path></svg></span>
+	</a>
+	<span>
+		How does Stable Diffusion work?
+	</span>
+</h2>
+<p>Having seen the high-quality images that stable diffusion can produce, let's try to understand 
+a bit better how the model functions.</p>
+<p>Stable Diffusion is based on a particular type of diffusion model called <strong>Latent Diffusion</strong>, proposed in <a href="https://arxiv.org/abs/2112.10752">High-Resolution Image Synthesis with Latent Diffusion Models</a>.</p>
+<p>Generally speaking, diffusion models are machine learning systems that are trained to <em>denoise</em> random Gaussian noise step by step, to get to a sample of interest, such as an <em>image</em>. For a more detailed overview of how they work, check <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/diffusers_intro.ipynb">this colab</a>.</p>
+<p>Diffusion models have shown to achieve state-of-the-art results for generating image data. But one downside of diffusion models is that the reverse denoising process is slow because of its repeated, sequential nature. In addition, these models consume a lot of memory because they operate in pixel space, which becomes huge when generating high-resolution images. Therefore, it is challenging to train these models and also use them for inference.</p>
+<br>
+
+<p>Latent diffusion can reduce the memory and compute complexity by applying the diffusion process over a lower dimensional <em>latent</em> space, instead of using the actual pixel space. This is the key difference between standard diffusion and latent diffusion models: <strong>in latent diffusion the model is trained to generate latent (compressed) representations of the images.</strong> </p>
+<p>There are three main components in latent diffusion.</p>
+<ol>
+<li>An autoencoder (VAE).</li>
+<li>A <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/diffusers_intro.ipynb#scrollTo=wW8o1Wp0zRkq">U-Net</a>.</li>
+<li>A text-encoder, <em>e.g.</em> <a href="https://huggingface.co/docs/transformers/model_doc/clip#transformers.CLIPTextModel">CLIP's Text Encoder</a>.</li>
+</ol>
+<p><strong>1. The autoencoder (VAE)</strong></p>
+<p>The VAE model has two parts, an encoder and a decoder. The encoder is used to convert the image into a low dimensional latent representation, which will serve as the input to the <em>U-Net</em> model.
+The decoder, conversely, transforms the latent representation back into an image.</p>
+<p> During latent diffusion <em>training</em>, the encoder is used to get the latent representations (<em>latents</em>) of the images for the forward diffusion process, which applies more and more noise at each step. During <em>inference</em>, the denoised latents generated by the reverse diffusion process are converted back into images using the VAE decoder. As we will see during inference we <strong>only need the VAE decoder</strong>.</p>
+<p><strong>2. The U-Net</strong></p>
+<p>The U-Net has an encoder part and a decoder part both comprised of ResNet blocks.
+The encoder compresses an image representation into a lower resolution image representation and the decoder decodes the lower resolution image representation back to the original higher resolution image representation that is supposedly less noisy.
+More specifically, the U-Net output predicts the noise residual which can be used to compute the predicted denoised image representation.</p>
+<p>To prevent the U-Net from losing important information while downsampling, short-cut connections are usually added between the downsampling ResNets of the encoder to the upsampling ResNets of the decoder.
+Additionally, the stable diffusion U-Net is able to condition its output on text-embeddings via cross-attention layers. The cross-attention layers are added to both the encoder and decoder part of the U-Net usually between ResNet blocks.</p>
+<p><strong>3. The Text-encoder</strong></p>
+<p>The text-encoder is responsible for transforming the input prompt, <em>e.g.</em> "An astronaut riding a horse" into an embedding space that can be understood by the U-Net. It is usually a simple <em>transformer-based</em> encoder that maps a sequence of input tokens to a sequence of latent text-embeddings.</p>
+<p>Inspired by <a href="https://imagen.research.google/">Imagen</a>, Stable Diffusion does <strong>not</strong> train the text-encoder during training and simply uses an CLIP's already trained text encoder, <a href="https://huggingface.co/docs/transformers/model_doc/clip#transformers.CLIPTextModel">CLIPTextModel</a>.</p>
+<p><strong>Why is latent diffusion fast and efficient?</strong></p>
+<p>Since latent diffusion operates on a low dimensional space, it greatly reduces the memory and compute requirements compared to pixel-space diffusion models. For example, the autoencoder used in Stable Diffusion has a reduction factor of 8. This means that an image of shape <code>(3, 512, 512)</code> becomes <code>(3, 64, 64)</code> in latent space, which requires <code>8 × 8 = 64</code> times less memory.</p>
+<p>This is why it's possible to generate <code>512 × 512</code> images so quickly, even on 16GB Colab GPUs!</p>
+<p><strong>Stable Diffusion during inference</strong></p>
+<p>Putting it all together, let's now take a closer look at how the model works in inference by illustrating the logical flow.</p>
+<p align="center">
+<img src="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion.png" alt="sd-pipeline" width="500">
+</p>
+
+<p>The stable diffusion model takes both a latent seed and a text prompt as an input. The latent seed is then used to generate random latent image representations of size <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mo>×</mo><mn>64</mn></mrow><annotation encoding="application/x-tex"> 64 \times 64 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">4</span></span></span></span> where as the text prompt is transformed to text embeddings of size <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>77</mn><mo>×</mo><mn>768</mn></mrow><annotation encoding="application/x-tex"> 77 \times 768 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mord">6</span><span class="mord">8</span></span></span></span> via CLIP's text encoder.</p>
+<p>Next the U-Net iteratively <em>denoises</em> the random latent image representations while being conditioned on the text embeddings. The output of the U-Net, being the noise residual, is used to compute a denoised latent image representation via a scheduler algorithm. Many different scheduler algorithms can be used for this computation, each having its pro- and cons. For Stable Diffusion, we recommend using one of:</p>
+<ul>
+<li><a href="https://github.com/huggingface/diffusers/blob/main/src/diffusers/schedulers/scheduling_pndm.py">PNDM scheduler</a> (used by default)</li>
+<li><a href="https://github.com/huggingface/diffusers/blob/main/src/diffusers/schedulers/scheduling_ddim.py">DDIM scheduler</a></li>
+<li><a href="https://github.com/huggingface/diffusers/blob/main/src/diffusers/schedulers/scheduling_lms_discrete.py">K-LMS scheduler</a></li>
+</ul>
+<p>Theory on how the scheduler algorithm function is out-of-scope for this notebook, but in short one should remember that they compute the predicted denoised image representation from the previous noise representation and the predicted noise residual.
+For more information, we recommend looking into <a href="https://arxiv.org/abs/2206.00364">Elucidating the Design Space of Diffusion-Based Generative Models</a></p>
+<p>The <em>denoising</em> process is repeated <em>ca.</em> 50 times to step-by-step retrieve better latent image representations.
+Once complete, the latent image representation is decoded by the decoder part of the variational auto encoder.</p>
+<p>After this brief introduction to Latent and Stable Diffusion, let's see how to make advanced use of 🤗 Hugging Face <code>diffusers</code> library!</p>
+<h2 class="relative group flex items-center">
+	<a id="writing-your-own-inference-pipeline" class="block pr-1.5 text-lg md:absolute md:p-1.5 md:opacity-0 md:group-hover:opacity-100 md:right-full" href="https://huggingface.co/blog/stable_diffusion#writing-your-own-inference-pipeline">
+		<span class="header-link"><svg class="text-gray-500 hover:text-black dark:hover:text-gray-200 w-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path d="M167.594 88.393a8.001 8.001 0 0 1 0 11.314l-67.882 67.882a8 8 0 1 1-11.314-11.315l67.882-67.881a8.003 8.003 0 0 1 11.314 0zm-28.287 84.86l-28.284 28.284a40 40 0 0 1-56.567-56.567l28.284-28.284a8 8 0 0 0-11.315-11.315l-28.284 28.284a56 56 0 0 0 79.196 79.197l28.285-28.285a8 8 0 1 0-11.315-11.314zM212.852 43.14a56.002 56.002 0 0 0-79.196 0l-28.284 28.284a8 8 0 1 0 11.314 11.314l28.284-28.284a40 40 0 0 1 56.568 56.567l-28.285 28.285a8 8 0 0 0 11.315 11.314l28.284-28.284a56.065 56.065 0 0 0 0-79.196z" fill="currentColor"></path></svg></span>
+	</a>
+	<span>
+		Writing your own inference pipeline
+	</span>
+</h2>
+<p>Finally, we show how you can create custom diffusion pipelines with <code>diffusers</code>.
+Writing a custom inference pipeline is an advanced use of the <code>diffusers</code> library that can be useful to switch out certain components, such as the VAE or scheduler explained above.</p>
+<p>For example, we'll show how to use Stable Diffusion with a different scheduler, namely <a href="https://github.com/crowsonkb">Katherine Crowson's</a> K-LMS scheduler added in <a href="https://github.com/huggingface/diffusers/pull/185">this PR</a>.</p>
+<p>The <a href="https://huggingface.co/CompVis/stable-diffusion-v1-4/tree/main">pre-trained model</a> includes all the components required to setup a complete diffusion pipeline. They are stored in the following folders:</p>
+<ul>
+<li><code>text_encoder</code>: Stable Diffusion uses CLIP, but other diffusion models may use other encoders such as <code>BERT</code>.</li>
+<li><code>tokenizer</code>. It must match the one used by the <code>text_encoder</code> model.</li>
+<li><code>scheduler</code>: The scheduling algorithm used to progressively add noise to the image during training.</li>
+<li><code>unet</code>: The model used to generate the latent representation of the input.</li>
+<li><code>vae</code>: Autoencoder module that we'll use to decode latent representations into real images.</li>
+</ul>
+<p>We can load the components by referring to the folder they were saved, using the <code>subfolder</code> argument to <code>from_pretrained</code>.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">from</span> transformers <span class="hljs-keyword">import</span> CLIPTextModel, CLIPTokenizer
+<span class="hljs-keyword">from</span> diffusers <span class="hljs-keyword">import</span> AutoencoderKL, UNet2DConditionModel, PNDMScheduler
+
+<span class="hljs-comment"># 1. Load the autoencoder model which will be used to decode the latents into image space. </span>
+vae = AutoencoderKL.from_pretrained(<span class="hljs-string">"CompVis/stable-diffusion-v1-4"</span>, subfolder=<span class="hljs-string">"vae"</span>)
+
+<span class="hljs-comment"># 2. Load the tokenizer and text encoder to tokenize and encode the text. </span>
+tokenizer = CLIPTokenizer.from_pretrained(<span class="hljs-string">"openai/clip-vit-large-patch14"</span>)
+text_encoder = CLIPTextModel.from_pretrained(<span class="hljs-string">"openai/clip-vit-large-patch14"</span>)
+
+<span class="hljs-comment"># 3. The UNet model for generating the latents.</span>
+unet = UNet2DConditionModel.from_pretrained(<span class="hljs-string">"CompVis/stable-diffusion-v1-4"</span>, subfolder=<span class="hljs-string">"unet"</span>)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>Now instead of loading the pre-defined scheduler, we load the <a href="https://github.com/huggingface/diffusers/blob/71ba8aec55b52a7ba5a1ff1db1265ffdd3c65ea2/src/diffusers/schedulers/scheduling_lms_discrete.py#L26">K-LMS scheduler</a> with some fitting parameters.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">from</span> diffusers <span class="hljs-keyword">import</span> LMSDiscreteScheduler
+
+scheduler = LMSDiscreteScheduler(beta_start=<span class="hljs-number">0.00085</span>, beta_end=<span class="hljs-number">0.012</span>, beta_schedule=<span class="hljs-string">"scaled_linear"</span>, num_train_timesteps=<span class="hljs-number">1000</span>)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>Next, let's move the models to GPU.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">torch_device = <span class="hljs-string">"cuda"</span>
+vae.to(torch_device)
+text_encoder.to(torch_device)
+unet.to(torch_device) 
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>We now define the parameters we'll use to generate images.</p>
+<p>Note that <code>guidance_scale</code> is defined analog to the guidance weight <code>w</code> of equation (2) in the <a href="https://arxiv.org/pdf/2205.11487.pdf">Imagen paper</a>. <code>guidance_scale == 1</code> corresponds to doing no classifier-free guidance. Here we set it to 7.5 as also done previously.</p>
+<p>In contrast to the previous examples, we set <code>num_inference_steps</code> to 100 to get an even more defined image.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">prompt = [<span class="hljs-string">"a photograph of an astronaut riding a horse"</span>]
+
+height = <span class="hljs-number">512</span>                        <span class="hljs-comment"># default height of Stable Diffusion</span>
+width = <span class="hljs-number">512</span>                         <span class="hljs-comment"># default width of Stable Diffusion</span>
+
+num_inference_steps = <span class="hljs-number">100</span>           <span class="hljs-comment"># Number of denoising steps</span>
+
+guidance_scale = <span class="hljs-number">7.5</span>                <span class="hljs-comment"># Scale for classifier-free guidance</span>
+
+generator = torch.manual_seed(<span class="hljs-number">0</span>)    <span class="hljs-comment"># Seed generator to create the inital latent noise</span>
+
+batch_size = <span class="hljs-built_in">len</span>(prompt)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>First, we get the <code>text_embeddings</code> for the passed prompt. 
+These embeddings will be used to condition the UNet model and guide the image generation towards something that should resemble the input prompt.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">text_input = tokenizer(prompt, padding=<span class="hljs-string">"max_length"</span>, max_length=tokenizer.model_max_length, truncation=<span class="hljs-literal">True</span>, return_tensors=<span class="hljs-string">"pt"</span>)
+
+text_embeddings = text_encoder(text_input.input_ids.to(torch_device))[<span class="hljs-number">0</span>]
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>We'll also get the unconditional text embeddings for classifier-free guidance, which are just the embeddings for the padding token (empty text). They need to have the same shape as the conditional <code>text_embeddings</code> (<code>batch_size</code> and <code>seq_length</code>)</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">max_length = text_input.input_ids.shape[-<span class="hljs-number">1</span>]
+uncond_input = tokenizer(
+    [<span class="hljs-string">""</span>] * batch_size, padding=<span class="hljs-string">"max_length"</span>, max_length=max_length, return_tensors=<span class="hljs-string">"pt"</span>
+)
+uncond_embeddings = text_encoder(uncond_input.input_ids.to(torch_device))[<span class="hljs-number">0</span>]   
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>For classifier-free guidance, we need to do two forward passes: one with the conditioned input (<code>text_embeddings</code>), and another with the unconditional embeddings (<code>uncond_embeddings</code>). In practice, we can concatenate both into a single batch to avoid doing two forward passes.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">text_embeddings = torch.cat([uncond_embeddings, text_embeddings])
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>Next, we generate the initial random noise.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">latents = torch.randn(
+    (batch_size, unet.in_channels, height // <span class="hljs-number">8</span>, width // <span class="hljs-number">8</span>),
+    generator=generator,
+)
+latents = latents.to(torch_device)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>If we examine the <code>latents</code> at this stage we'll see their shape is <code>torch.Size([1, 4, 64, 64])</code>, much smaller than the image we want to generate. The model will transform this latent representation (pure noise) into a <code>512 × 512</code> image later on.</p>
+<p>Next, we initialize the scheduler with our chosen <code>num_inference_steps</code>.
+This will compute the <code>sigmas</code> and exact time step values to be used during the denoising process.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">scheduler.set_timesteps(num_inference_steps)
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>The K-LMS scheduler needs to multiply the <code>latents</code> by its <code>sigma</code> values. Let's do this here:</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">latents = latents * scheduler.init_noise_sigma
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>We are ready to write the denoising loop.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-keyword">from</span> tqdm.auto <span class="hljs-keyword">import</span> tqdm
+
+scheduler.set_timesteps(num_inference_steps)
+
+<span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> tqdm(scheduler.timesteps):
+    <span class="hljs-comment"># expand the latents if we are doing classifier-free guidance to avoid doing two forward passes.</span>
+    latent_model_input = torch.cat([latents] * <span class="hljs-number">2</span>)
+
+    latent_model_input = scheduler.scale_model_input(latent_model_input, timestep=t)
+
+    <span class="hljs-comment"># predict the noise residual</span>
+    <span class="hljs-keyword">with</span> torch.no_grad():
+        noise_pred = unet(latent_model_input, t, encoder_hidden_states=text_embeddings).sample
+
+    <span class="hljs-comment"># perform guidance</span>
+    noise_pred_uncond, noise_pred_text = noise_pred.chunk(<span class="hljs-number">2</span>)
+    noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+
+    <span class="hljs-comment"># compute the previous noisy sample x_t -&gt; x_t-1</span>
+    latents = scheduler.step(noise_pred, t, latents).prev_sample
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>We now use the <code>vae</code> to decode the generated <code>latents</code> back into the image.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python"><span class="hljs-comment"># scale and decode the image latents with vae</span>
+latents = <span class="hljs-number">1</span> / <span class="hljs-number">0.18215</span> * latents
+<span class="hljs-keyword">with</span> torch.no_grad():
+    image = vae.decode(latents).sample
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p>And finally, let's convert the image to PIL so we can display or save it.</p>
+<div class="relative group repo-copy-code"><pre><code class="language-python">image = (image / <span class="hljs-number">2</span> + <span class="hljs-number">0.5</span>).clamp(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>)
+image = image.detach().cpu().permute(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">1</span>).numpy()
+images = (image * <span class="hljs-number">255</span>).<span class="hljs-built_in">round</span>().astype(<span class="hljs-string">"uint8"</span>)
+pil_images = [Image.fromarray(image) <span class="hljs-keyword">for</span> image <span class="hljs-keyword">in</span> images]
+pil_images[<span class="hljs-number">0</span>]
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<p><a href="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_k_lms.png" rel="nofollow"><img src="./Stable Diffusion with 🧨 Diffusers_files/stable_diffusion_k_lms.png" alt="png"></a></p>
+<p>We've gone from the basic use of Stable Diffusion using 🤗 Hugging Face Diffusers to more advanced uses of the library, and we tried to introduce all the pieces in a modern diffusion system. If you liked this topic and want to learn more, we recommend the following resources:</p>
+<ul>
+<li>Our <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/stable_diffusion.ipynb">Colab notebook</a>.</li>
+<li>The <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/diffusers_intro.ipynb">Getting Started with Diffusers</a> notebook, that gives a broader overview on Diffusion systems.</li>
+<li>The <a href="https://huggingface.co/blog/annotated-diffusion">Annotated Diffusion Model</a> blog post.</li>
+<li>Our <a href="https://github.com/huggingface/diffusers">code in GitHub</a> where we'd be more than happy if you leave a ⭐ if <code>diffusers</code> is useful to you!</li>
+</ul>
+<h3 class="relative group flex items-center">
+	<a id="citation" class="block pr-1.5 text-lg md:absolute md:p-1.5 md:opacity-0 md:group-hover:opacity-100 md:right-full" href="https://huggingface.co/blog/stable_diffusion#citation">
+		<span class="header-link"><svg class="text-gray-500 hover:text-black dark:hover:text-gray-200 w-4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 256"><path d="M167.594 88.393a8.001 8.001 0 0 1 0 11.314l-67.882 67.882a8 8 0 1 1-11.314-11.315l67.882-67.881a8.003 8.003 0 0 1 11.314 0zm-28.287 84.86l-28.284 28.284a40 40 0 0 1-56.567-56.567l28.284-28.284a8 8 0 0 0-11.315-11.315l-28.284 28.284a56 56 0 0 0 79.196 79.197l28.285-28.285a8 8 0 1 0-11.315-11.314zM212.852 43.14a56.002 56.002 0 0 0-79.196 0l-28.284 28.284a8 8 0 1 0 11.314 11.314l28.284-28.284a40 40 0 0 1 56.568 56.567l-28.285 28.285a8 8 0 0 0 11.315 11.314l28.284-28.284a56.065 56.065 0 0 0 0-79.196z" fill="currentColor"></path></svg></span>
+	</a>
+	<span>
+		Citation:
+	</span>
+</h3>
+<div class="relative group repo-copy-code"><pre><code>@article{patil2022stable,
+  author = {Patil, Suraj and Cuenca, Pedro and Lambert, Nathan and von Platen, Patrick},
+  title = {Stable Diffusion with 🧨 Diffusers},
+  journal = {Hugging Face Blog},
+  year = {2022},
+  note = {[https://huggingface.co/blog/rlhf](https://huggingface.co/blog/stable_diffusion)},
+}
+</code></pre><button class="absolute top-3 right-3 transition opacity-0 group-hover:opacity-80"><svg class="" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="currentColor" focusable="false" role="img" width="0.9em" height="0.9em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path d="M28,10V28H10V10H28m0-2H10a2,2,0,0,0-2,2V28a2,2,0,0,0,2,2H28a2,2,0,0,0,2-2V10a2,2,0,0,0-2-2Z" transform="translate(0)"></path><path d="M4,18H2V4A2,2,0,0,1,4,2H18V4H4Z" transform="translate(0)"></path><rect fill="none" width="32" height="32"></rect></svg></button></div>
+<!-- HTML_TAG_END --></div>
+	<div class="mx-auto max-w-5xl border-t border-gray-200 py-16"><div class="container grid gap-4 py-8"><div class="grid gap-6 md:grid-cols-2"><p class="col-span-1 mb-6 text-center text-lg font-semibold md:col-span-2">More articles from our Blog</p>
+					<div class="SVELTE_HYDRATER contents" data-props="{&quot;blog&quot;:{&quot;local&quot;:&quot;watermarking&quot;,&quot;title&quot;:&quot;AI Watermarking 101: Tools and Techniques&quot;,&quot;author&quot;:&quot;sasha&quot;,&quot;thumbnail&quot;:&quot;/blog/assets/watermarking/thumbnail.png&quot;,&quot;date&quot;:&quot;Feb 26, 2024&quot;,&quot;tags&quot;:[&quot;ethics&quot;,&quot;research&quot;,&quot;nlp&quot;,&quot;guide&quot;]},&quot;blogUrl&quot;:&quot;/blog&quot;,&quot;lang&quot;:&quot;en&quot;}" data-target="BlogThumbnail"><a class="flex lg:col-span-1 hover:shadow-alternate group relative flex-col overflow-hidden rounded-xl border border-gray-100 shadow-sm transition-shadow" href="https://huggingface.co/blog/watermarking"><div class="aspect-[1.91/1] w-full rounded-b shadow-alternate relative flex-none overflow-hidden rounded-lg bg-white"><div class="absolute inset-0 group-hover:opacity-40 dark:backdrop-brightness-105"></div> <img src="./Stable Diffusion with 🧨 Diffusers_files/thumbnail.png" class="h-full w-full object-cover group-hover:brightness-110" alt=""></div> <div class="flex flex-col p-4"><h2 class="font-serif font-semibold group-hover:underline text-xl">AI Watermarking 101: Tools and Techniques </h2> <p class="mt-3 flex flex-wrap items-center gap-y-1.5 font-mono text-xs text-gray-500">By&nbsp;<object title=""><span class="inline-block"><span class="contents"><a href="https://huggingface.co/sasha" class="hover:underline">sasha</a></span> </span></object> <span class="mx-2 h-1 w-1 flex-none bg-gray-200"></span> <span>February 26, 2024</span> </p></div></a></div><div class="SVELTE_HYDRATER contents" data-props="{&quot;blog&quot;:{&quot;local&quot;:&quot;leaderboard-haizelab&quot;,&quot;title&quot;:&quot;Introducing the Red-Teaming Resistance Leaderboard&quot;,&quot;author&quot;:&quot;steve-sli&quot;,&quot;guest&quot;:true,&quot;thumbnail&quot;:&quot;/blog/assets/leaderboards-on-the-hub/thumbnail_haizelab.png&quot;,&quot;date&quot;:&quot;Feb 23, 2024&quot;,&quot;tags&quot;:[&quot;leaderboard&quot;,&quot;guide&quot;,&quot;collaboration&quot;]},&quot;blogUrl&quot;:&quot;/blog&quot;,&quot;lang&quot;:&quot;en&quot;}" data-target="BlogThumbnail"><a class="flex lg:col-span-1 hover:shadow-alternate group relative flex-col overflow-hidden rounded-xl border border-gray-100 shadow-sm transition-shadow" href="https://huggingface.co/blog/leaderboard-haizelab"><div class="aspect-[1.91/1] w-full rounded-b shadow-alternate relative flex-none overflow-hidden rounded-lg bg-white"><div class="absolute inset-0 group-hover:opacity-40 dark:backdrop-brightness-105"></div> <img src="./Stable Diffusion with 🧨 Diffusers_files/thumbnail_haizelab.png" class="h-full w-full object-cover group-hover:brightness-110" alt=""></div> <div class="flex flex-col p-4"><h2 class="font-serif font-semibold group-hover:underline text-xl">Introducing the Red-Teaming Resistance Leaderboard </h2> <p class="mt-3 flex flex-wrap items-center gap-y-1.5 font-mono text-xs text-gray-500">By&nbsp;<object title=""><span class="inline-block"><span class="contents"><a href="https://huggingface.co/steve-sli" class="hover:underline">steve-sli</a></span> </span></object> <span class="mx-2 h-1 w-1 flex-none bg-gray-200"></span> <span>February 23, 2024</span> <span class="mx-2 h-1 w-1 flex-none bg-gray-200"></span> <span class="rounded bg-gray-100 px-1 text-gray-800 dark:bg-gray-800">guest</span></p></div></a></div></div></div></div></main>
+	<footer class="b-12 mb-2 flex border-t border-gray-100 md:h-14"><nav class="container flex flex-col justify-between space-y-2 py-6 text-gray-500 md:flex-row md:items-center md:space-y-0 md:py-0 md:text-sm"><div class="font-semibold text-black md:hidden">Company</div>
+		<div class="order-last pt-6 text-gray-400 md:order-none md:pt-0" href="Terms">© Hugging Face</div>
+		<a class="hover:underline" href="https://huggingface.co/terms-of-service">TOS</a>
+		<a class="hover:underline" href="https://huggingface.co/privacy">Privacy</a>
+		<a class="hover:underline" href="https://huggingface.co/huggingface">About</a>
+		<a class="hover:underline" href="https://apply.workable.com/huggingface/">Jobs</a>
+		<a href="https://huggingface.co/" class="group order-first flex-none pb-6 md:order-none md:pb-0"><svg class="h-7 w-7 transition-transform group-hover:-translate-y-px" viewBox="0 0 95 88" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M47.2119 76.5C66.4037 76.5 81.9619 60.9419 81.9619 41.75C81.9619 22.5581 66.4037 7 47.2119 7C28.02 7 12.4619 22.5581 12.4619 41.75C12.4619 60.9419 28.02 76.5 47.2119 76.5Z" fill="#FFD21E"></path><path d="M81.9619 41.75C81.9619 22.5581 66.4037 7 47.2119 7C28.02 7 12.4619 22.5581 12.4619 41.75C12.4619 60.9419 28.02 76.5 47.2119 76.5C66.4037 76.5 81.9619 60.9419 81.9619 41.75ZM8.46185 41.75C8.46185 20.349 25.8108 3 47.2119 3C68.6129 3 85.9619 20.349 85.9619 41.75C85.9619 63.151 68.6129 80.5 47.2119 80.5C25.8108 80.5 8.46185 63.151 8.46185 41.75Z" fill="#FF9D0B"></path><path d="M58.5024 32.2915C59.7768 32.7415 60.2839 35.3615 61.5713 34.6769C64.0095 33.3805 64.9351 30.353 63.6387 27.9148C62.3423 25.4767 59.3148 24.5511 56.8766 25.8475C54.4384 27.1439 53.5128 30.1714 54.8092 32.6096C55.4211 33.7604 57.3632 31.8892 58.5024 32.2915Z" fill="#3A3B45"></path><path d="M34.9454 32.2915C33.671 32.7415 33.164 35.3615 31.8766 34.6769C29.4384 33.3805 28.5128 30.353 29.8092 27.9148C31.1056 25.4767 34.1331 24.5511 36.5713 25.8475C39.0095 27.1439 39.9351 30.1714 38.6387 32.6096C38.0268 33.7604 36.0846 31.8892 34.9454 32.2915Z" fill="#3A3B45"></path><path d="M46.9619 56.289C56.7903 56.289 59.9619 47.5261 59.9619 43.0262C59.9619 40.6875 58.3898 41.4236 55.8718 42.6702C53.5449 43.8222 50.4102 45.4101 46.9619 45.4101C39.7822 45.4101 33.9619 38.5263 33.9619 43.0262C33.9619 47.5261 37.1334 56.289 46.9619 56.289Z" fill="#3A3B45"></path><mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="33" y="41" width="27" height="16"><path d="M46.9619 56.289C56.7903 56.289 59.9619 47.5261 59.9619 43.0262C59.9619 40.6875 58.3898 41.4236 55.8718 42.6702C53.5449 43.8222 50.4102 45.4101 46.9619 45.4101C39.7822 45.4101 33.9619 38.5263 33.9619 43.0262C33.9619 47.5261 37.1334 56.289 46.9619 56.289Z" fill="white"></path></mask><g mask="url(#mask0)"><path d="M47.2119 66.5C52.0018 66.5 55.8848 62.617 55.8848 57.8271C55.8848 54.0962 53.5291 50.9156 50.224 49.6915C50.1023 49.6464 49.9794 49.604 49.8553 49.5643C49.0219 49.2979 48.1337 52.1623 47.2119 52.1623C46.3506 52.1623 45.5186 49.2797 44.7332 49.5135C41.151 50.5799 38.5389 53.8984 38.5389 57.8271C38.5389 62.617 42.4219 66.5 47.2119 66.5Z" fill="#F94040"></path></g><path d="M70.7119 37C72.5068 37 73.9619 35.5449 73.9619 33.75C73.9619 31.9551 72.5068 30.5 70.7119 30.5C68.9169 30.5 67.4619 31.9551 67.4619 33.75C67.4619 35.5449 68.9169 37 70.7119 37Z" fill="#FF9D0B"></path><path d="M24.2119 37C26.0068 37 27.4619 35.5449 27.4619 33.75C27.4619 31.9551 26.0068 30.5 24.2119 30.5C22.4169 30.5 20.9619 31.9551 20.9619 33.75C20.9619 35.5449 22.4169 37 24.2119 37Z" fill="#FF9D0B"></path><path class="origin-bottom-right transition-transform group-hover:-rotate-6" d="M17.5238 48C15.9048 48 14.4578 48.665 13.4488 49.871C12.8248 50.618 12.1728 51.822 12.1198 53.625C11.4408 53.43 10.7878 53.321 10.1778 53.321C8.6278 53.321 7.2278 53.915 6.2378 54.994C4.9658 56.379 4.4008 58.081 4.6468 59.784C4.7638 60.595 5.0348 61.322 5.4398 61.995C4.5858 62.686 3.9568 63.648 3.6528 64.805C3.4148 65.712 3.1708 67.601 4.4448 69.547C4.3638 69.674 4.2878 69.806 4.2168 69.941C3.4508 71.395 3.4018 73.038 4.0778 74.568C5.1028 76.887 7.6498 78.714 12.5958 80.675C15.6728 81.895 18.4878 82.675 18.5128 82.682C22.5808 83.737 26.2598 84.273 29.4448 84.273C35.2988 84.273 39.4898 82.48 41.9018 78.944C45.7838 73.25 45.2288 68.042 40.2058 63.022C37.4258 60.244 35.5778 56.148 35.1928 55.249C34.4168 52.587 32.3648 49.628 28.9538 49.628H28.9528C28.6658 49.628 28.3758 49.651 28.0898 49.696C26.5958 49.931 25.2898 50.791 24.3568 52.085C23.3498 50.833 22.3718 49.837 21.4868 49.275C20.1528 48.429 18.8198 48 17.5238 48ZM17.5238 52C18.0338 52 18.6568 52.217 19.3438 52.653C21.4768 54.006 25.5928 61.081 27.0998 63.833C27.6048 64.755 28.4678 65.145 29.2448 65.145C30.7868 65.145 31.9908 63.612 29.3858 61.664C25.4688 58.733 26.8428 53.942 28.7128 53.647C28.7948 53.634 28.8758 53.628 28.9538 53.628C30.6538 53.628 31.4038 56.558 31.4038 56.558C31.4038 56.558 33.6018 62.078 37.3778 65.851C41.1538 69.625 41.3488 72.654 38.5968 76.69C36.7198 79.442 33.1268 80.273 29.4448 80.273C25.6258 80.273 21.7108 79.379 19.5168 78.81C19.4088 78.782 6.0658 75.013 7.7558 71.805C8.0398 71.266 8.5078 71.05 9.0968 71.05C11.4768 71.05 15.8058 74.592 17.6668 74.592C18.0828 74.592 18.3758 74.415 18.4958 73.983C19.2888 71.138 6.4388 69.942 7.5218 65.821C7.7128 65.092 8.2308 64.796 8.9588 64.797C12.1038 64.797 19.1598 70.328 20.6388 70.328C20.7518 70.328 20.8328 70.295 20.8768 70.225C21.6178 69.029 21.2118 68.194 15.9888 65.033C10.7658 61.871 7.0998 59.969 9.1848 57.699C9.4248 57.437 9.7648 57.321 10.1778 57.321C13.3488 57.322 20.8408 64.14 20.8408 64.14C20.8408 64.14 22.8628 66.243 24.0858 66.243C24.3668 66.243 24.6058 66.132 24.7678 65.858C25.6348 64.396 16.7148 57.636 16.2118 54.847C15.8708 52.957 16.4508 52 17.5238 52Z" fill="#FF9D0B"></path><path class="origin-bottom-right transition-transform group-hover:-rotate-6" d="M38.5967 76.6898C41.3487 72.6538 41.1537 69.6248 37.3777 65.8508C33.6017 62.0778 31.4037 56.5578 31.4037 56.5578C31.4037 56.5578 30.5827 53.3518 28.7127 53.6468C26.8427 53.9418 25.4697 58.7328 29.3867 61.6638C33.3037 64.5938 28.6067 66.5848 27.0997 63.8328C25.5927 61.0808 21.4777 54.0058 19.3437 52.6528C17.2107 51.2998 15.7087 52.0578 16.2117 54.8468C16.7147 57.6358 25.6357 64.3958 24.7677 65.8588C23.8997 67.3208 20.8407 64.1398 20.8407 64.1398C20.8407 64.1398 11.2687 55.4288 9.18465 57.6988C7.10065 59.9688 10.7657 61.8708 15.9887 65.0328C21.2127 68.1938 21.6177 69.0288 20.8767 70.2248C20.1347 71.4208 8.60465 61.6998 7.52165 65.8208C6.43965 69.9418 19.2887 71.1378 18.4957 73.9828C17.7027 76.8288 9.44465 68.5978 7.75565 71.8048C6.06565 75.0128 19.4087 78.7818 19.5167 78.8098C23.8267 79.9278 34.7727 82.2968 38.5967 76.6898Z" fill="#FFD21E"></path><path class="origin-bottom-left transition-transform group-hover:rotate-6" d="M77.3999 48C79.0189 48 80.4659 48.665 81.4749 49.871C82.0989 50.618 82.7509 51.822 82.8039 53.625C83.4829 53.43 84.1359 53.321 84.7459 53.321C86.2959 53.321 87.6959 53.915 88.6859 54.994C89.9579 56.379 90.5229 58.081 90.2769 59.784C90.1599 60.595 89.8889 61.322 89.4839 61.995C90.3379 62.686 90.9669 63.648 91.2709 64.805C91.5089 65.712 91.7529 67.601 90.4789 69.547C90.5599 69.674 90.6359 69.806 90.7069 69.941C91.4729 71.395 91.5219 73.038 90.8459 74.568C89.8209 76.887 87.2739 78.714 82.3279 80.675C79.2509 81.895 76.4359 82.675 76.4109 82.682C72.3429 83.737 68.6639 84.273 65.4789 84.273C59.6249 84.273 55.4339 82.48 53.0219 78.944C49.1399 73.25 49.6949 68.042 54.7179 63.022C57.4979 60.244 59.3459 56.148 59.7309 55.249C60.5069 52.587 62.5589 49.628 65.9699 49.628H65.9709C66.2579 49.628 66.5479 49.651 66.8339 49.696C68.3279 49.931 69.6339 50.791 70.5669 52.085C71.5739 50.833 72.5519 49.837 73.4369 49.275C74.7709 48.429 76.1039 48 77.3999 48ZM77.3999 52C76.8899 52 76.2669 52.217 75.5799 52.653C73.4469 54.006 69.3309 61.081 67.8239 63.833C67.3189 64.755 66.4559 65.145 65.6789 65.145C64.1369 65.145 62.9329 63.612 65.5379 61.664C69.4549 58.733 68.0809 53.942 66.2109 53.647C66.1289 53.634 66.0479 53.628 65.9699 53.628C64.2699 53.628 63.5199 56.558 63.5199 56.558C63.5199 56.558 61.3219 62.078 57.5459 65.851C53.7699 69.625 53.5749 72.654 56.3269 76.69C58.2039 79.442 61.7969 80.273 65.4789 80.273C69.2979 80.273 73.2129 79.379 75.4069 78.81C75.5149 78.782 88.8579 75.013 87.1679 71.805C86.8839 71.266 86.4159 71.05 85.8269 71.05C83.4469 71.05 79.1179 74.592 77.2569 74.592C76.8409 74.592 76.5479 74.415 76.4279 73.983C75.6349 71.138 88.4849 69.942 87.4019 65.821C87.2109 65.092 86.6929 64.796 85.9649 64.797C82.8199 64.797 75.7639 70.328 74.2849 70.328C74.1719 70.328 74.0909 70.295 74.0469 70.225C73.3059 69.029 73.7119 68.194 78.9349 65.033C84.1579 61.871 87.8239 59.969 85.7389 57.699C85.4989 57.437 85.1589 57.321 84.7459 57.321C81.5749 57.322 74.0829 64.14 74.0829 64.14C74.0829 64.14 72.0609 66.243 70.8379 66.243C70.5569 66.243 70.3179 66.132 70.1559 65.858C69.2889 64.396 78.2089 57.636 78.7119 54.847C79.0529 52.957 78.4729 52 77.3999 52Z" fill="#FF9D0B"></path><path class="origin-bottom-left transition-transform group-hover:rotate-6" d="M56.3271 76.6898C53.5751 72.6538 53.7701 69.6248 57.5461 65.8508C61.3221 62.0778 63.5201 56.5578 63.5201 56.5578C63.5201 56.5578 64.3411 53.3518 66.2111 53.6468C68.0811 53.9418 69.4541 58.7328 65.5371 61.6638C61.6201 64.5938 66.3171 66.5848 67.8241 63.8328C69.3311 61.0808 73.4461 54.0058 75.5801 52.6528C77.7131 51.2998 79.2151 52.0578 78.7121 54.8468C78.2091 57.6358 69.2881 64.3958 70.1561 65.8588C71.0241 67.3208 74.0831 64.1398 74.0831 64.1398C74.0831 64.1398 83.6551 55.4288 85.7391 57.6988C87.8231 59.9688 84.1581 61.8708 78.9351 65.0328C73.7111 68.1938 73.3061 69.0288 74.0471 70.2248C74.7891 71.4208 86.3191 61.6998 87.4021 65.8208C88.4841 69.9418 75.6351 71.1378 76.4281 73.9828C77.2211 76.8288 85.4791 68.5978 87.1681 71.8048C88.8581 75.0128 75.5151 78.7818 75.4071 78.8098C71.0971 79.9278 60.1511 82.2968 56.3271 76.6898Z" fill="#FFD21E"></path></svg></a>
+		<div class="pt-6 font-semibold text-black md:hidden md:pt-0">Website</div>
+
+		<a class="hover:underline" href="https://huggingface.co/models">Models</a>
+		<a class="hover:underline" href="https://huggingface.co/datasets">Datasets</a>
+		<a class="hover:underline" href="https://huggingface.co/spaces">Spaces</a>
+		<a class="hover:underline" href="https://huggingface.co/pricing">Pricing</a>
+		<a class="hover:underline" href="https://huggingface.co/docs">Docs</a></nav></footer></div>
+
+		<script>
+			import("/front/build/kube-3dddf71/index.js");
+			window.moonSha = "kube-3dddf71/";
+			window.hubConfig = JSON.parse(`{"features":{"signupDisabled":false},"sshGitUrl":"git@hf.co","moonHttpUrl":"https://huggingface.co","captchaApiKey":"bd5f2066-93dc-4bdd-a64b-a24646ca3859","captchaDisabledOnSignup":true,"datasetsServerPublicUrl":"https://datasets-server.huggingface.co","stripePublicKey":"pk_live_x2tdjFXBCvXo2FFmMybezpeM00J6gPCAAc","environment":"production","userAgent":"HuggingFace (production)"}`);
+		</script>
+
+		<!-- Stripe -->
+		<script>
+			if (["hf.co", "huggingface.co"].includes(window.location.hostname)) {
+				const script = document.createElement("script");
+				script.src = "https://js.stripe.com/v3/";
+				script.async = true;
+				document.head.appendChild(script);
+			}
+		</script>
+
+		<!-- Google analytics v4 -->
+		<script>
+			if (["hf.co", "huggingface.co"].includes(window.location.hostname)) {
+				const script = document.createElement("script");
+				script.src = "https://www.googletagmanager.com/gtag/js?id=G-8Q63TH4CSL";
+				script.async = true;
+				document.head.appendChild(script);
+
+				window.dataLayer = window.dataLayer || [];
+				function gtag() {
+					if (window.dataLayer !== undefined) {
+						window.dataLayer.push(arguments);
+					}
+				}
+				gtag("js", new Date());
+				gtag("config", "G-8Q63TH4CSL", { page_path: "/blog/stable_diffusion" });
+				/// ^ See https://developers.google.com/analytics/devguides/collection/gtagjs/pages
+				gtag("consent", "default", { ad_storage: "denied", analytics_storage: "denied" });
+				/// ^ See https://developers.google.com/tag-platform/gtagjs/reference#consent
+				/// TODO: ask the user for their consent and update this with gtag('consent', 'update')
+			}
+		</script>
+	
+
+<iframe name="__privateStripeMetricsController3990" frameborder="0" allowtransparency="true" scrolling="no" role="presentation" allow="payment *" src="./Stable Diffusion with 🧨 Diffusers_files/m-outer-3437aaddcdf6922d623e172c2d6f9278.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important; user-select: none !important;"></iframe></body></html>

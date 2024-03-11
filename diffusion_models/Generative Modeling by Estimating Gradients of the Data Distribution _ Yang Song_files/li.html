@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://d3n7ct9nohphbs.cloudfront.net/li.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+  <script src="./did-0049.min.js"></script></head>
+  <body>
+  <script type="text/javascript">
+    var scriptTag = document.createElement("script");
+    scriptTag.src = "https://d-code.liadm.com/did-0049.min.js";
+    scriptTag["onload"] = function (e) {
+      window.liQd_did_0049.resolve(
+        function (result) {
+          if (result) {
+            var imgSrc =
+              "https://live.rezync.com/sync?c=16b6410431b6374e780104abb0443ca8&p=2e0ce37ff83973e4bd4a086b623a17cf&k=jordan-sandbox-pixel-1985&zmpID=jordan-sandbox";
+            if (result.nonId) {
+              imgSrc += "&custom4=" + encodeURIComponent(result.nonId);
+            }
+            if (result.md5) {
+              imgSrc += "&custom5=" + encodeURIComponent(result.md5);
+            }
+            if (result.sha2) {
+              imgSrc += "&custom6=" + encodeURIComponent(result.sha2);
+            }
+            imgSrc += "&cache_buster=" + new Date().getTime();
+            var imgTag = document.createElement("img");
+            imgTag.width = 1;
+            imgTag.height = 1;
+            imgTag.src = imgSrc;
+            document.body.appendChild(imgTag);
+          }
+        },
+        function (err) {
+          console.error(err);
+        },
+        { resolve: ["md5", "sha2", "nonId"] }
+      );
+    };
+    document.head.appendChild(scriptTag);
+  </script>
+
+<img width="1" height="1" src="./sync"></body></html>
